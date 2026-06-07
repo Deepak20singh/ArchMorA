@@ -1,0 +1,213 @@
+.canvas-wrapper {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #020617;
+  overflow: hidden;
+  position: relative;
+}
+
+// ── Topbar ────────────────────────────────────────────────────────────────────
+.topbar {
+  min-height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  z-index: 10;
+  gap: 12px;
+  flex-shrink: 0;
+
+  .title-section {
+    flex-shrink: 0;
+    h2 { color: #f1f5f9; font-size: 14px; font-weight: 700; margin: 0; white-space: nowrap; }
+    span { color: #475569; font-size: 10px; display: block; }
+  }
+
+  .legend-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    svg { flex-shrink: 0; }
+    &.leg-sync     { color: #a5b4fc; }
+    &.leg-async    { color: #fdba74; }
+    &.leg-event    { color: #86efac; }
+    &.leg-database { color: #67e8f9; }
+    &.leg-cache    { color: #fde047; }
+  }
+
+  .actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+
+    button {
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.18s;
+      touch-action: manipulation;
+      &:hover { background: #334155; color: #f1f5f9; }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-color: transparent;
+      color: #fff;
+      &:hover { opacity: 0.88; }
+    }
+  }
+}
+
+// ── Drop zone ─────────────────────────────────────────────────────────────────
+.drop-zone {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#drawflow {
+  width: 100%;
+  height: 100%;
+  background-color: #020617;
+}
+
+// ── Drawflow internals (all moved to global styles.scss) ─────────────────────
+
+// ── Zoom controls ─────────────────────────────────────────────────────────────
+.zoom-controls {
+  position: absolute;
+  bottom: 72px;   // above the float-toggles bar
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(15,23,42,0.92);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 4px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  z-index: 20;
+  user-select: none;
+}
+
+.zoom-btn {
+  width: 36px; height: 36px;
+  border: none; border-radius: 8px; background: transparent;
+  color: #94a3b8; font-size: 22px; font-weight: 300;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: 0.15s; touch-action: manipulation;
+  &:hover, &:active { background: #1e293b; color: #f1f5f9; }
+}
+
+.zoom-level {
+  min-width: 52px; height: 36px;
+  border: none; border-radius: 8px; background: #1e293b;
+  color: #a5b4fc; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: 0.15s; touch-action: manipulation;
+  &:hover { background: #334155; color: #f1f5f9; }
+}
+
+// ── Edge popup ────────────────────────────────────────────────────────────────
+.edge-popup-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; backdrop-filter: blur(3px);
+  padding: 16px;
+}
+
+.edge-popup {
+  background: #0f172a; border: 1px solid #334155; border-radius: 18px;
+  padding: 24px 22px 18px; width: 100%; max-width: 360px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+  h3 { color: #f1f5f9; font-size: 15px; font-weight: 700; margin: 0; }
+}
+
+.field {
+  display: flex; flex-direction: column; gap: 6px;
+  label { font-size: 10px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.6px; }
+  input {
+    background: #1e293b; border: 1px solid #334155; border-radius: 10px;
+    padding: 10px 13px; color: #f1f5f9; font-size: 14px; outline: none;
+    transition: border-color 0.18s;
+    &:focus { border-color: #6366f1; }
+  }
+}
+
+.type-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.type-btn {
+  padding: 7px 12px; border-radius: 8px; border: 1.5px solid #334155;
+  background: #1e293b; color: #94a3b8; font-size: 11px; font-weight: 600;
+  cursor: pointer; text-transform: uppercase; letter-spacing: 0.4px; transition: 0.15s;
+  touch-action: manipulation;
+  &:hover, &:active { color: #fff; background: #334155; }
+}
+.type-sync.active     { border-color: #6366f1; background: rgba(99,102,241,0.2);  color: #a5b4fc; }
+.type-async.active    { border-color: #f97316; background: rgba(249,115,22,0.18); color: #fdba74; }
+.type-event.active    { border-color: #22c55e; background: rgba(34,197,94,0.15);  color: #86efac; }
+.type-database.active { border-color: #06b6d4; background: rgba(6,182,212,0.15);  color: #67e8f9; }
+.type-cache.active    { border-color: #eab308; background: rgba(234,179,8,0.15);  color: #fde047; }
+
+.popup-actions {
+  display: flex; gap: 10px; justify-content: flex-end;
+  button {
+    height: 40px; padding: 0 20px; border-radius: 10px; border: none;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.18s;
+    touch-action: manipulation;
+  }
+  .btn-cancel  { background: #1e293b; color: #64748b; border: 1px solid #334155; &:hover { color: #f1f5f9; } }
+  .btn-confirm { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; &:hover { opacity: 0.88; } }
+}
+
+// ── Responsive topbar ─────────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+  .topbar .legend-strip { gap: 8px; }
+  .topbar .leg-item svg { width: 22px; }
+}
+
+@media (max-width: 639px) {
+  .topbar {
+    padding: 0 10px;
+    gap: 8px;
+    min-height: 52px;
+
+    // Hide legend on phone — too cramped
+    .legend-strip { display: none; }
+
+    .title-section span { display: none; }
+
+    .actions button { padding: 0 10px; font-size: 11px; height: 30px; }
+  }
+
+  // Zoom controls above bottom bar
+  .zoom-controls { bottom: 76px; right: 12px; }
+}

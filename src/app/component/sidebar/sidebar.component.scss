@@ -1,0 +1,268 @@
+.sidebar {
+  width: 100%;
+  height: 100%;
+  background: #0a0f1e;
+  color: white;
+  padding: 0;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.sidebar-scroll::-webkit-scrollbar { width: 4px; }
+.sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+.sidebar-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+.sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+// ── Logo ──────────────────────────────────────────────────────────────────────
+.logo-section {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+
+  h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 3px;
+    background: linear-gradient(135deg, #60a5fa, #818cf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.3px;
+  }
+
+  p {
+    color: #475569;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin: 0;
+  }
+}
+
+// ── Search ────────────────────────────────────────────────────────────────────
+.search-box {
+  padding: 12px 14px;
+  flex-shrink: 0;
+
+  input {
+    width: 100%;
+    background: #1e293b;
+    border: 1px solid #1e293b;
+    outline: none;
+    padding: 9px 12px 9px 34px;
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 12px;
+    transition: 0.2s;
+    box-sizing: border-box;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+
+    &::placeholder { color: #475569; }
+    &:focus {
+      border-color: #6366f1;
+      background-color: #1e293b;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
+  }
+}
+
+// ── Legend ────────────────────────────────────────────────────────────────────
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  padding: 8px 14px 12px;
+  flex-shrink: 0;
+
+  .leg {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.04);
+  }
+  .leg-sync    { color: #a5b4fc; }
+  .leg-async   { color: #fdba74; }
+  .leg-event   { color: #86efac; }
+  .leg-db      { color: #67e8f9; }
+  .leg-cache   { color: #fde047; }
+}
+
+// ── Sections ──────────────────────────────────────────────────────────────────
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 14px 14px;
+}
+
+.section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 10px 0 4px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+// ── Node card ─────────────────────────────────────────────────────────────────
+.card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.node-card {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: grab;
+  transition: all 0.15s ease;
+  user-select: none;
+
+  &:hover {
+    background: rgba(99,102,241,0.08);
+    border-color: rgba(99,102,241,0.25);
+    transform: translateX(2px);
+  }
+
+  &:active { cursor: grabbing; transform: scale(0.98); }
+
+  .icon {
+    width: 34px; height: 34px; min-width: 34px;
+    border-radius: 9px;
+    background: rgba(99,102,241,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    transition: 0.15s;
+  }
+
+  &:hover .icon { background: rgba(99,102,241,0.2); }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+
+    .title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .type {
+      font-size: 10px;
+      color: #475569;
+    }
+  }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+.sidebar-footer {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 14px 16px;
+  background: #0a0f1e;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.footer-logo {
+  font-size: 13px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #60a5fa, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-tagline {
+  font-size: 10px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.15s;
+  word-break: break-all;
+
+  &:hover { color: #a5b4fc; }
+}
+
+.footer-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+}
+
+.footer-about {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.footer-about-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.footer-about p {
+  font-size: 11px;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #1e293b;
+}
+
+// ── Scrollbar ─────────────────────────────────────────────────────────────────
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: #334155; }

@@ -1,0 +1,85 @@
+<div class="canvas-wrapper">
+
+  <div class="topbar">
+    <div class="title-section">
+      <h2>Architecture Canvas</h2>
+      <span>Scroll=pan · Ctrl+Scroll=zoom · Drag canvas to pan</span>
+    </div>
+
+    <div class="legend-strip">
+      <div class="leg-item leg-sync">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#6366f1" stroke-width="3"/></svg>
+        Sync
+      </div>
+      <div class="leg-item leg-async">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#f97316" stroke-width="2.5" stroke-dasharray="7 4"/></svg>
+        Async
+      </div>
+      <div class="leg-item leg-event">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#22c55e" stroke-width="2.5" stroke-dasharray="3 4"/></svg>
+        Event
+      </div>
+      <div class="leg-item leg-database">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#06b6d4" stroke-width="3"/></svg>
+        DB
+      </div>
+      <div class="leg-item leg-cache">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#eab308" stroke-width="2.5" stroke-dasharray="5 3"/></svg>
+        Cache
+      </div>
+    </div>
+
+    <div class="actions">
+      <button (click)="clearCanvas()">Clear</button>
+      <button class="btn-primary" (click)="exportGraph()">Export JSON</button>
+    </div>
+  </div>
+
+  <div class="drop-zone" #dropZone
+    (dragover)="onDragOver($event)"
+    (drop)="onDrop($event)">
+    <div #drawflowContainer id="drawflow"></div>
+
+    <!-- Zoom controls — bottom right corner -->
+    <div class="zoom-controls">
+      <button class="zoom-btn" (click)="zoomOut()" title="Zoom out">−</button>
+      <button class="zoom-level" (click)="zoomReset()" title="Reset zoom">{{ zoomLevel }}%</button>
+      <button class="zoom-btn" (click)="zoomIn()" title="Zoom in">+</button>
+    </div>
+  </div>
+
+  <!-- Edge popup -->
+  <div class="edge-popup-overlay" *ngIf="popup.visible" (click)="cancelEdge()">
+    <div class="edge-popup" (click)="$event.stopPropagation()">
+      <h3>Configure Connection</h3>
+
+      <div class="field">
+        <label>Type</label>
+        <div class="type-btns">
+          <button *ngFor="let t of commTypes"
+            [class.active]="popup.communication === t.val"
+            [ngClass]="'type-btn type-' + t.val"
+            (click)="popup.communication = t.val">
+            {{ t.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Protocol / Note</label>
+        <input type="text" [(ngModel)]="popup.protocol" placeholder="REST, gRPC, AMQP, SQL..." />
+      </div>
+
+      <div class="field">
+        <label>Label on line</label>
+        <input type="text" [(ngModel)]="popup.label" placeholder="e.g. JWT Auth, Publish event..." />
+      </div>
+
+      <div class="popup-actions">
+        <button class="btn-cancel" (click)="cancelEdge()">Cancel</button>
+        <button class="btn-confirm" (click)="confirmEdge()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+</div>

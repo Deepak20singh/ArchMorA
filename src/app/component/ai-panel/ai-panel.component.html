@@ -1,0 +1,89 @@
+<div class="ai-panel">
+
+  <!-- Header -->
+  <div class="panel-header">
+    <div class="left">
+      <h2>🤖 AI Architecture Review</h2>
+      <div class="badges">
+        <span class="badge">{{ nodeCount() }} nodes</span>
+        <span class="badge">{{ edgeCount() }} connections</span>
+        <span class="badge lang" *ngIf="detectedLang">{{ detectedLang }}</span>
+      </div>
+    </div>
+    <div class="right">
+      <input class="api-input" type="password" [(ngModel)]="apiKey"
+        placeholder="Gemini API Key (optional)" />
+      <button class="analyze-btn" (click)="analyze()" [disabled]="loading">
+        <span *ngIf="!loading">⚡ Analyze</span>
+        <span *ngIf="loading">Analyzing...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Inputs -->
+  <div class="input-row">
+
+    <!-- Question -->
+    <div class="field-wrap">
+      <div class="field-label">
+        ❓ Question
+        <button class="mic-btn" (click)="toggleMic('question')"
+          [class.rec]="isRecordingQuestion"
+          [title]="isRecordingQuestion ? 'Stop' : 'Speak question'">
+          {{ isRecordingQuestion ? '🔴' : '🎤' }}
+        </button>
+      </div>
+      <input type="text" [(ngModel)]="question"
+        [class.recording-input]="isRecordingQuestion"
+        placeholder="e.g. Design YouTube, Design Twitter..." />
+    </div>
+
+    <!-- Description -->
+    <div class="field-wrap">
+      <div class="field-label">
+        📝 Your Answer
+        <button class="mic-btn" (click)="toggleMic('description')"
+          [class.rec]="isRecordingDesc"
+          [title]="isRecordingDesc ? 'Stop' : 'Speak answer'">
+          {{ isRecordingDesc ? '🔴' : '🎤' }}
+        </button>
+      </div>
+      <textarea [(ngModel)]="description" rows="3"
+        [class.recording-input]="isRecordingDesc"
+        [placeholder]="isRecordingDesc ? '🎤 Bol raha hoon...' : 'Apna approach explain karo — components, DB, scaling...'">
+      </textarea>
+    </div>
+
+  </div>
+
+  <!-- Error -->
+  <div class="error-bar" *ngIf="error">⚠️ {{ error }}</div>
+
+  <!-- Result -->
+  <div class="result-area" *ngIf="result || loading">
+
+    <div class="loading-state" *ngIf="loading">
+      <div class="pulse"></div>
+      <span>Gemini ko bhej raha hoon...</span>
+    </div>
+
+    <div class="sections" *ngIf="!loading && resultSections.length">
+      <div class="section-card" *ngFor="let s of resultSections"
+        [class.score-card]="s.type === 'score'"
+        [class.good-card]="s.type === 'good'"
+        [class.bad-card]="s.type === 'bad'"
+        [class.pro-card]="s.type === 'pro'"
+        [class.structure-card]="s.type === 'structure'"
+        [class.warn-card]="s.type === 'warn'"
+        [class.final-card]="s.type === 'final'"
+        [class.tip-card]="s.type === 'tip'">
+        <div class="section-heading">{{ s.heading }}</div>
+        <div class="section-body">{{ s.body }}</div>
+      </div>
+    </div>
+
+    <pre class="raw-result" *ngIf="!loading && !resultSections.length && result">{{ result }}</pre>
+
+  </div>
+
+</div>

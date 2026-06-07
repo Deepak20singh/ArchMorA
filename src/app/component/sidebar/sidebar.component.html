@@ -1,0 +1,41 @@
+<div class="sidebar">
+
+  <div class="sidebar-scroll">
+
+    <div class="logo-section">
+      <h1>ArchMora</h1>
+      <p>System Design Builder</p>
+    </div>
+
+    <div class="search-box">
+      <input type="text" [(ngModel)]="search" placeholder="Search components..." />
+    </div>
+
+    <div class="legend">
+      <span class="leg leg-sync">— sync</span>
+      <span class="leg leg-async">- - async</span>
+      <span class="leg leg-event">· · event</span>
+      <span class="leg leg-db">— db</span>
+      <span class="leg leg-cache">- cache</span>
+    </div>
+
+    <div class="section" *ngFor="let section of filteredSections">
+      <div class="section-title">{{ section.title }}</div>
+      <div class="card-container">
+        <div
+          class="node-card"
+          *ngFor="let item of section.items"
+          draggable="true"
+          [attr.data-item]="toJson(item)">
+          <div class="icon">{{ item.icon }}</div>
+          <div class="details">
+            <span class="title">{{ item.label }}</span>
+            <span class="type">{{ item.type }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

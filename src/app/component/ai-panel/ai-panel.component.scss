@@ -1,0 +1,264 @@
+.ai-panel {
+  width: 100%;
+  height: 100%;
+  background: #020617;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.left {
+  h2 { color: #f1f5f9; font-size: 14px; font-weight: 700; margin: 0 0 5px; }
+}
+
+.badges {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 10px;
+  color: #94a3b8;
+  &.lang { border-color: #6366f1; color: #a5b4fc; }
+}
+
+.right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.api-input {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 7px 11px;
+  color: #f1f5f9;
+  font-size: 12px;
+  outline: none;
+  width: 180px;
+  &:focus { border-color: #6366f1; }
+}
+
+.analyze-btn {
+  height: 34px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.18s;
+  &:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+// ── Input Row ─────────────────────────────────────────────────────────────────
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+input[type="text"] {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #f1f5f9;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.18s;
+  &:focus { border-color: #6366f1; }
+  &.recording-input { border-color: #ef4444; }
+}
+
+textarea {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #f1f5f9;
+  font-size: 13px;
+  outline: none;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.6;
+  font-family: inherit;
+  transition: border-color 0.18s;
+  &:focus { border-color: #6366f1; }
+  &.recording-input { border-color: #ef4444; }
+}
+
+// ── Mic ───────────────────────────────────────────────────────────────────────
+.mic-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 2px 7px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.4;
+  transition: 0.15s;
+  &:hover { background: #334155; }
+  &.rec {
+    background: rgba(239,68,68,0.15);
+    border-color: #ef4444;
+    animation: pulse-mic 1s infinite;
+  }
+}
+
+@keyframes pulse-mic {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+}
+
+// ── Error ─────────────────────────────────────────────────────────────────────
+.error-bar {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fca5a5;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+// ── Result ────────────────────────────────────────────────────────────────────
+.result-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 12px;
+  padding: 8px 0;
+}
+
+.pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #6366f1;
+  flex-shrink: 0;
+  animation: pulse-dot 1s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.6); opacity: 0.4; }
+}
+
+.sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+
+.section-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 12px 14px;
+
+  &.score-card     { border-color: #6366f1; background: rgba(99,102,241,0.08); }
+  &.good-card      { border-color: #22c55e; background: rgba(34,197,94,0.07); }
+  &.bad-card       { border-color: #ef4444; background: rgba(239,68,68,0.07); }
+  &.warn-card      { border-color: #f97316; background: rgba(249,115,22,0.07); }
+  &.tip-card       { border-color: #eab308; background: rgba(234,179,8,0.07); }
+  &.pro-card       { border-color: #06b6d4; background: rgba(6,182,212,0.07); }
+  &.structure-card { border-color: #8b5cf6; background: rgba(139,92,246,0.07); }
+  &.final-card     { border-color: #10b981; background: rgba(16,185,129,0.07); grid-column: 1 / -1; }
+}
+
+.section-heading {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 6px;
+}
+
+.section-body {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.raw-result {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 14px;
+  color: #e2e8f0;
+  font-size: 12px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+// ── Scrollbar ─────────────────────────────────────────────────────────────────
+.ai-panel::-webkit-scrollbar,
+.result-area::-webkit-scrollbar { width: 4px; }
+.ai-panel::-webkit-scrollbar-thumb,
+.result-area::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .input-row { grid-template-columns: 1fr; }
+  .right { width: 100%; }
+  .api-input { flex: 1; width: auto; }
+  .analyze-btn { flex: 1; }
+}
