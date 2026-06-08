@@ -21,10 +21,11 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
+  console.error("Gemini Error:", err);
 
-    res.status(500).json({
-      error: err.message
-    });
-
-  }
+  return res.status(500).json({
+    message: err.message,
+    details: err.toString()
+  });
+}
 }
