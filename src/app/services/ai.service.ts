@@ -50,14 +50,14 @@ export class AiService {
     const data = await response.json();
 
 if (!response.ok) {
-  console.error(data);
-  throw new Error(data.message || 'Failed');
+  console.error('Backend Error:', data);
+  throw new Error(data.message || 'Failed to generate review');
 }
 
-  
-    return {
-      raw: data.response,
-      language
-    };
+return {
+  raw: data.response,
+  language
+};
+    
   }
 }

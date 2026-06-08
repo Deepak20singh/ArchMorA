@@ -1,9 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
-
   try {
-
     const { prompt } = req.body;
 
     const genAI = new GoogleGenerativeAI(
@@ -16,16 +14,17 @@ export default async function handler(req, res) {
 
     const result = await model.generateContent(prompt);
 
-    res.status(200).json({
+    return res.status(200).json({
       response: result.response.text()
     });
 
   } catch (err) {
-  console.error("Gemini Error:", err);
 
-  return res.status(500).json({
-    message: err.message,
-    details: err.toString()
-  });
-}
+    console.error("FULL ERROR:", err);
+
+    return res.status(500).json({
+      message: err.message,
+      stack: err.stack
+    });
+  }
 }
