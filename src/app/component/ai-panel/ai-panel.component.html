@@ -11,8 +11,7 @@
       </div>
     </div>
     <div class="right">
-      <input class="api-input" type="password" [(ngModel)]="apiKey"
-        placeholder="Gemini API Key (optional)" />
+      
       <button class="analyze-btn" (click)="analyze()" [disabled]="loading">
         <span *ngIf="!loading">⚡ Analyze</span>
         <span *ngIf="loading">Analyzing...</span>
@@ -50,7 +49,7 @@
       </div>
       <textarea [(ngModel)]="description" rows="3"
         [class.recording-input]="isRecordingDesc"
-        [placeholder]="isRecordingDesc ? '🎤 Bol raha hoon...' : 'Apna approach explain karo — components, DB, scaling...'">
+        [placeholder]="isRecordingDesc ? '🎤Speaking...' : 'Explain your approch — components, DB, scaling...'">
       </textarea>
     </div>
 

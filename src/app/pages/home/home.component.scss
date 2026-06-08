@@ -67,7 +67,15 @@ $panel-w-tablet    : 240px;
   display: flex;
   flex-direction: column;
   transition: height 0.25s cubic-bezier(0.4,0,0.2,1);
-  &.open { min-height: 120px; }
+  &.open { min-height: 260px; }
+
+  app-ai-panel {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .ai-drag-handle {
