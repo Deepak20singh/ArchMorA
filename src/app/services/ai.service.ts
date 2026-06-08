@@ -8,7 +8,7 @@ export interface ReviewResult {
 
 @Injectable({ providedIn: 'root' })
 export class AiService {
-  
+
  setApiKey(key: string): void {
     // Vercel env variable use ho rahi hai
   }
@@ -46,13 +46,15 @@ export class AiService {
       },
       body: JSON.stringify({ prompt })
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to generate review');
-    }
-
+     
     const data = await response.json();
 
+if (!response.ok) {
+  console.error(data);
+  throw new Error(data.message || 'Failed');
+}
+
+  
     return {
       raw: data.response,
       language
