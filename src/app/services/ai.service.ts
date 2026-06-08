@@ -8,6 +8,7 @@ export interface ReviewResult {
 
 @Injectable({ providedIn: 'root' })
 export class AiService {
+  
  setApiKey(key: string): void {
     // Vercel env variable use ho rahi hai
   }
