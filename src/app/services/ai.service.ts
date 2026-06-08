@@ -8,6 +8,9 @@ export interface ReviewResult {
 
 @Injectable({ providedIn: 'root' })
 export class AiService {
+ setApiKey(key: string): void {
+    // Vercel env variable use ho rahi hai
+  }
 
   detectLanguage(text: string): string {
     const hindiChars = (text.match(/[\u0900-\u097F]/g) || []).length;
