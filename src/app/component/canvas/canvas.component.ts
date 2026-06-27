@@ -82,14 +82,14 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
     document.addEventListener('dragover', this.onDragOverNative);
     document.addEventListener('drop', this.onDropNative);
-    this.containerRef.nativeElement.addEventListener('touch-drop', this.onTouchDrop);
+    document.addEventListener('touch-drop', this.onTouchDrop as EventListener);
   }
 
   ngOnDestroy(): void {
     if (!this.isBrowser) return;
     document.removeEventListener('dragover', this.onDragOverNative);
     document.removeEventListener('drop', this.onDropNative);
-    this.containerRef.nativeElement.removeEventListener('touch-drop', this.onTouchDrop);
+    document.removeEventListener('touch-drop', this.onTouchDrop as EventListener);
   }
 
   // ── Zoom ──────────────────────────────────────────────────────────────────

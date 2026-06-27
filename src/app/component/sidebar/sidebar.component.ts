@@ -154,6 +154,8 @@ export class SidebarComponent implements AfterViewInit {
 
   private ghost: HTMLElement | null = null;
   private dragItem: string | null = null;
+  private longPressTimer: any = null;
+  private isDragging = false;
 
   private bindTouchDrag(): void {
     const host = this.host.nativeElement;
@@ -161,45 +163,81 @@ export class SidebarComponent implements AfterViewInit {
     host.addEventListener('touchstart', (e: TouchEvent) => {
       const card = (e.target as HTMLElement).closest<HTMLElement>('[data-item]');
       if (!card?.dataset['item']) return;
-      this.dragItem = card.dataset['item']!;
 
+      const itemData = card.dataset['item']!;
       const t = e.touches[0];
-      this.ghost = card.cloneNode(true) as HTMLElement;
-      Object.assign(this.ghost.style, {
-        position: 'fixed', zIndex: '9999', pointerEvents: 'none',
-        opacity: '0.85', transform: 'scale(1.05)',
-        left: t.clientX - card.offsetWidth / 2 + 'px',
-        top:  t.clientY - card.offsetHeight / 2 + 'px',
-        width: card.offsetWidth + 'px',
-      });
-      document.body.appendChild(this.ghost);
+      const startX = t.clientX;
+      const startY = t.clientY;
+
+      this.longPressTimer = setTimeout(() => {
+        this.isDragging = true;
+        this.dragItem = itemData;
+
+        this.ghost = document.createElement('div');
+        const parsed = JSON.parse(itemData);
+        this.ghost.textContent = parsed.icon + ' ' + parsed.label;
+        Object.assign(this.ghost.style, {
+          position: 'fixed',
+          zIndex: '99999',
+          pointerEvents: 'none',
+          opacity: '0.92',
+          left: startX - 50 + 'px',
+          top: startY - 20 + 'px',
+          background: '#1e293b',
+          border: '2px solid #6366f1',
+          borderRadius: '10px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+          padding: '6px 14px',
+          fontSize: '13px',
+          color: '#f1f5f9',
+          whiteSpace: 'nowrap',
+        });
+        document.body.appendChild(this.ghost);
+      }, 300);
     }, { passive: true });
 
     host.addEventListener('touchmove', (e: TouchEvent) => {
+      if (!this.isDragging) {
+        // not dragging yet — cancel long press if moved too much
+        clearTimeout(this.longPressTimer);
+        return;
+      }
       if (!this.ghost) return;
       const t = e.touches[0];
-      this.ghost.style.left = t.clientX - this.ghost.offsetWidth  / 2 + 'px';
+      this.ghost.style.left = t.clientX - this.ghost.offsetWidth / 2 + 'px';
       this.ghost.style.top  = t.clientY - this.ghost.offsetHeight / 2 + 'px';
     }, { passive: true });
 
     host.addEventListener('touchend', (e: TouchEvent) => {
+      clearTimeout(this.longPressTimer);
       if (this.ghost) { this.ghost.remove(); this.ghost = null; }
-      if (!this.dragItem) return;
+
+      if (!this.isDragging || !this.dragItem) {
+        this.isDragging = false;
+        this.dragItem = null;
+        return;
+      }
 
       const t = e.changedTouches[0];
       const dropEl = document.getElementById('drawflow');
-      if (!dropEl) { this.dragItem = null; return; }
-
-      const rect = dropEl.getBoundingClientRect();
-      if (t.clientX < rect.left || t.clientX > rect.right ||
-          t.clientY < rect.top  || t.clientY > rect.bottom) {
-        this.dragItem = null; return;
+      if (dropEl) {
+        const rect = dropEl.getBoundingClientRect();
+        if (t.clientX >= rect.left && t.clientX <= rect.right &&
+            t.clientY >= rect.top  && t.clientY <= rect.bottom) {
+          document.dispatchEvent(new CustomEvent('touch-drop', {
+            detail: { item: this.dragItem, clientX: t.clientX, clientY: t.clientY },
+          }));
+        }
       }
 
-      dropEl.dispatchEvent(new CustomEvent('touch-drop', {
-        detail: { item: this.dragItem, clientX: t.clientX, clientY: t.clientY },
-        bubbles: true,
-      }));
+      this.isDragging = false;
+      this.dragItem = null;
+    }, { passive: true });
+
+    host.addEventListener('touchcancel', () => {
+      clearTimeout(this.longPressTimer);
+      if (this.ghost) { this.ghost.remove(); this.ghost = null; }
+      this.isDragging = false;
       this.dragItem = null;
     }, { passive: true });
   }
