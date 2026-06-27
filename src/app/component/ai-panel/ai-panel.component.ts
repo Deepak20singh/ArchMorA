@@ -102,8 +102,8 @@ export class AiPanelComponent implements OnDestroy {
       );
       this.result = res.raw;
       this.detectedLang = res.language;
-    } catch (err: any) {
-      this.error = err?.message ?? 'AI review failed. API key check karo.';
+    } catch {
+      this.error = '⚠️ AI limit exhausted — please try again after some time or next day.';
     } finally {
       this.loading = false;
     }
