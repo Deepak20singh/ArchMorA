@@ -60,7 +60,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private onTouchStart = (e: TouchEvent): void => {
-   
+    this.swipeStartX = e.touches[0].clientX;
+    this.swipeStartY = e.touches[0].clientY;
   };
 
   private onTouchEnd = (e: TouchEvent): void => {
