@@ -144,18 +144,63 @@ export class SidebarComponent implements AfterViewInit {
     this.host.nativeElement.addEventListener('dragstart', (e: DragEvent) => {
       const target = e.target as HTMLElement;
       const card = target.closest<HTMLElement>('[data-item]');
-      console.log('[Sidebar] 🟡 dragstart triggered — target:', target.tagName, target.className);
-      if (!card?.dataset['item']) {
-        console.warn('[Sidebar] ❌ dragstart: no [data-item] found — card:', card);
-        return;
-      }
+      if (!card?.dataset['item']) return;
       e.dataTransfer!.setData('application/json', card.dataset['item']);
       e.dataTransfer!.effectAllowed = 'move';
-      console.log('[Sidebar] ✅ dragstart data set:', card.dataset['item']);
     });
 
-    this.host.nativeElement.addEventListener('dragend', (e: DragEvent) => {
-      console.log('[Sidebar] 🔵 dragend — dropEffect:', e.dataTransfer?.dropEffect);
-    });
+    this.bindTouchDrag();
+  }
+
+  private ghost: HTMLElement | null = null;
+  private dragItem: string | null = null;
+
+  private bindTouchDrag(): void {
+    const host = this.host.nativeElement;
+
+    host.addEventListener('touchstart', (e: TouchEvent) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>('[data-item]');
+      if (!card?.dataset['item']) return;
+      this.dragItem = card.dataset['item']!;
+
+      const t = e.touches[0];
+      this.ghost = card.cloneNode(true) as HTMLElement;
+      Object.assign(this.ghost.style, {
+        position: 'fixed', zIndex: '9999', pointerEvents: 'none',
+        opacity: '0.85', transform: 'scale(1.05)',
+        left: t.clientX - card.offsetWidth / 2 + 'px',
+        top:  t.clientY - card.offsetHeight / 2 + 'px',
+        width: card.offsetWidth + 'px',
+      });
+      document.body.appendChild(this.ghost);
+    }, { passive: true });
+
+    host.addEventListener('touchmove', (e: TouchEvent) => {
+      if (!this.ghost) return;
+      const t = e.touches[0];
+      this.ghost.style.left = t.clientX - this.ghost.offsetWidth  / 2 + 'px';
+      this.ghost.style.top  = t.clientY - this.ghost.offsetHeight / 2 + 'px';
+    }, { passive: true });
+
+    host.addEventListener('touchend', (e: TouchEvent) => {
+      if (this.ghost) { this.ghost.remove(); this.ghost = null; }
+      if (!this.dragItem) return;
+
+      const t = e.changedTouches[0];
+      const dropEl = document.getElementById('drawflow');
+      if (!dropEl) { this.dragItem = null; return; }
+
+      const rect = dropEl.getBoundingClientRect();
+      if (t.clientX < rect.left || t.clientX > rect.right ||
+          t.clientY < rect.top  || t.clientY > rect.bottom) {
+        this.dragItem = null; return;
+      }
+
+      dropEl.dispatchEvent(new CustomEvent('touch-drop', {
+        detail: { item: this.dragItem, clientX: t.clientX, clientY: t.clientY },
+        bubbles: true,
+      }));
+      this.dragItem = null;
+    }, { passive: true });
   }
 }

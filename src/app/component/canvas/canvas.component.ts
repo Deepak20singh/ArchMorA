@@ -82,12 +82,14 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
     document.addEventListener('dragover', this.onDragOverNative);
     document.addEventListener('drop', this.onDropNative);
+    this.containerRef.nativeElement.addEventListener('touch-drop', this.onTouchDrop);
   }
 
   ngOnDestroy(): void {
     if (!this.isBrowser) return;
     document.removeEventListener('dragover', this.onDragOverNative);
     document.removeEventListener('drop', this.onDropNative);
+    this.containerRef.nativeElement.removeEventListener('touch-drop', this.onTouchDrop);
   }
 
   // ── Zoom ──────────────────────────────────────────────────────────────────
@@ -229,6 +231,26 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
     const id: number = this.editor.addNode(item.label, 1, 1, x, y, item.type, {}, html);
     console.log('[Canvas] ✅ addNode id:', id);
+    this.zone.run(() => this.graphService.addNode(id, item, x, y));
+  };
+
+  private onTouchDrop = (e: Event): void => {
+    const { item: raw, clientX, clientY } = (e as CustomEvent).detail;
+    let item: { label: string; type: string; icon: string };
+    try { item = JSON.parse(raw); } catch { return; }
+
+    const rect = this.containerRef.nativeElement.getBoundingClientRect();
+    const x = (clientX - rect.left - this.editor.canvas_x) / this.editor.zoom;
+    const y = (clientY - rect.top  - this.editor.canvas_y) / this.editor.zoom;
+
+    if (item.type === 'note') { this.addTextNode(x, y); return; }
+
+    const html = `<div class="df-node-card">
+      <div class="df-node-icon">${item.icon}</div>
+      <div class="df-node-name">${item.label}</div>
+      <div class="df-node-type">${item.type}</div>
+    </div>`;
+    const id: number = this.editor.addNode(item.label, 1, 1, x, y, item.type, {}, html);
     this.zone.run(() => this.graphService.addNode(id, item, x, y));
   };
 
